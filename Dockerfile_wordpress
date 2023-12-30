@@ -5,22 +5,22 @@ WORKDIR /var/www/html
 ENV TZ=Asia/Shanghai
 
 RUN <<EOF
-git clone 
-sudo mkdir wp-content
-sudo mkdir wp-content/plugins
+apt install git
+mkdir wp-content
+mkdir wp-content/plugins
 git clone https://github.com/WordPress/sqlite-database-integration
-sudo mv sqlite-database-integration wp-content/plugins/
-sudo cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
-sudo sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/html/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
-sudo sed -i "s+{SQLITE_PLUGIN}+sqlite-database-integration/load.php+g" wp-content/db.php
-sudo mkdir wp-content/database
-sudo touch database/.ht.sqlite
-sudo chown -R www-data:www-data wp-content/database
-sudo chmod -R 644 wp-content/database
-sudo chmod 766 wp-content/database
-sudo echo 'DENY FROM ALL' | sudo tee wp-content/database/.htaccess > /dev/null
-sudo cp wp-config-sample.php wp-config.php
-sudo sed -i '1i \
+mv sqlite-database-integration wp-content/plugins/
+cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
+sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/html/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
+sed -i "s+{SQLITE_PLUGIN}+sqlite-database-integration/load.php+g" wp-content/db.php
+mkdir wp-content/database
+touch database/.ht.sqlite
+chown -R www-data:www-data wp-content/database
+chmod -R 644 wp-content/database
+chmod 766 wp-content/database
+echo 'DENY FROM ALL' | sudo tee wp-content/database/.htaccess > /dev/null
+cp wp-config-sample.php wp-config.php
+sed -i '1i \
 <?php \
 putenv("WORDPRESS_DB_HOST=localhost"); \
 putenv("WORDPRESS_DB_USER=not-used"); \
