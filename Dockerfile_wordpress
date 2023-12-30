@@ -5,9 +5,8 @@ WORKDIR /var/www/html
 ENV TZ=Asia/Shanghai
 
 RUN <<EOF
-apt install git
-mkdir wp-content
-mkdir wp-content/plugins
+apt-get update \        
+apt-get install -y git
 git clone https://github.com/WordPress/sqlite-database-integration
 mv sqlite-database-integration wp-content/plugins/
 cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
@@ -18,7 +17,7 @@ touch database/.ht.sqlite
 chown -R www-data:www-data wp-content/database
 chmod -R 644 wp-content/database
 chmod 766 wp-content/database
-echo 'DENY FROM ALL' | sudo tee wp-content/database/.htaccess > /dev/null
+echo 'DENY FROM ALL' | tee wp-content/database/.htaccess > /dev/null
 cp wp-config-sample.php wp-config.php
 sed -i '1i \
 <?php \
