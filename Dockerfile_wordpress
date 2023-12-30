@@ -13,7 +13,7 @@ cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
 sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/html/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
 sed -i "s+{SQLITE_PLUGIN}+sqlite-database-integration/load.php+g" wp-content/db.php
 mkdir wp-content/database
-touch database/.ht.sqlite
+touch wp-content/database/.ht.sqlite
 chown -R www-data:www-data wp-content/database
 chmod -R 644 wp-content/database
 chmod 766 wp-content/database
