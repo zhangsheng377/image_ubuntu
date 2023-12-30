@@ -1,9 +1,32 @@
 FROM wordpress:latest
 # ENTRYPOINT []
+WORKDIR /var/www/html
 
 ENV TZ=Asia/Shanghai
 
-# RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-# RUN apt clean && apt update && apt install git python3 python3-pip vim inetutils-ping -y
+RUN <<EOF
+git clone 
+sudo mkdir wp-content
+sudo mkdir wp-content/plugins
+git clone https://github.com/WordPress/sqlite-database-integration
+sudo mv sqlite-database-integration wp-content/plugins/
+sudo cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
+sudo sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/html/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
+sudo sed -i "s+{SQLITE_PLUGIN}+sqlite-database-integration/load.php+g" wp-content/db.php
+sudo mkdir wp-content/database
+sudo touch database/.ht.sqlite
+sudo chown -R www-data:www-data wp-content/database
+sudo chmod -R 644 wp-content/database
+sudo chmod 766 wp-content/database
+sudo echo 'DENY FROM ALL' | sudo tee wp-content/database/.htaccess > /dev/null
+sudo cp wp-config-sample.php wp-config.php
+sudo sed -i '1i \
+<?php \
+putenv("WORDPRESS_DB_HOST=localhost"); \
+putenv("WORDPRESS_DB_USER=not-used"); \
+putenv("WORDPRESS_DB_PASSWORD=not-used"); \
+putenv("WORDPRESS_DB_NAME=not-used"); \
+?>' index.php
+EOF
 
 # CMD ["/bin/bash"]
