@@ -5,7 +5,13 @@ WORKDIR /var/www/html
 ENV TZ=Asia/Shanghai
 
 RUN apt-get update && apt-get install -y git
-RUN ls -l
+
+RUN <<EOF
+git clone https://github.com/WordPress/WordPress
+mv WordPress/* .
+rm -rf WordPress
+ls -l
+EOF
 
 RUN <<EOF
 git clone https://github.com/WordPress/sqlite-database-integration
