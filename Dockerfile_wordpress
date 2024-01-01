@@ -1,6 +1,6 @@
 FROM wordpress:latest
 # ENTRYPOINT []
-WORKDIR /var/www/html
+WORKDIR /var/www/my
 
 ENV TZ=Asia/Shanghai
 
@@ -18,7 +18,7 @@ RUN <<EOF
 git clone https://github.com/WordPress/sqlite-database-integration
 mv sqlite-database-integration wp-content/plugins/
 cp wp-content/plugins/sqlite-database-integration/db.copy wp-content/db.php
-sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/html/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
+sed -i "s+{SQLITE_IMPLEMENTATION_FOLDER_PATH}+/var/www/my/wp-content/plugins/sqlite-database-integration+g" wp-content/db.php
 sed -i "s+{SQLITE_PLUGIN}+sqlite-database-integration/load.php+g" wp-content/db.php
 mkdir wp-content/database
 touch wp-content/database/.ht.sqlite
